@@ -36,7 +36,7 @@ public class Doctor {
 
     @ElementCollection
     @CollectionTable(name = "doctor_available_times", joinColumns = @JoinColumn(name = "doctor_id"))
-    @Column(name = "time_slot")
+    @Column(name = "available_times")
     private List<String> availableTimes = new ArrayList<>();
 
     // ----- Constructors -----
