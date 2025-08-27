@@ -1,31 +1,167 @@
-/* This is the style sheet for the patientDashboard.html */
-  .card-actions {
-    background-color: #244557;
-    padding: 10px;
-    text-align: center;
-  }
+/* ================================
+   Patient Dashboard (full stylesheet)
+   ================================ */
 
-  .card-actions:hover{
-    background-color: #1c3745;
-  }
-  .ripple-overlay {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    background-color: #1c3745;
-    border-radius: 50%;
-    z-index: 9999;
-    transform: translate(-50%, -50%) scale(0);
-    transition: transform 1s ease-out, opacity 1s ease;
-  }
-  
-  .ripple-overlay.active {
-    transform: translate(-50%, -50%) scale(150);
-    opacity: 1;
-  }
-  
-  .modalApp {
-    position: fixed;
+/* Reset & base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: Arial, sans-serif; color: #1f2937; }
+
+/* Neutral tokens (aligned with admin/doctor) */
+:root{
+  --bg: #f7f7f8;
+  --panel: #ffffff;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #015c5d;
+  --accent-2: #014b4c;
+  --shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+/* Page shell (wrapper in index/admin/doctor is similar) */
+.wrapper { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
+.main-content{
+  flex: 1;
+  max-width: 1100px;
+  width: 100%;
+  margin: 24px auto 32px;
+  padding: 0 16px;
+  display: grid;
+  gap: 16px;
+}
+
+/* Search & Filters */
+.searchBar{
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #111827;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.searchBar:focus{
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 3px rgba(1,92,93,0.12);
+}
+
+.filter-wrapper{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-select{
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #111827;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  min-width: 200px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.filter-select:focus{
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 3px rgba(1,92,93,0.12);
+}
+
+/* Cards container where doctor cards are injected */
+#content{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 980px){
+  #content{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+  #content{ grid-template-columns: 1fr; }
+}
+
+/* Reusable neutral card */
+.card{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+.card__title{ font-weight: 700; }
+.card__meta { color: var(--muted); font-size: 13px; }
+
+/* Actions area (Book button etc.) */
+.card-actions{
+  background-color: #244557;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+.card-actions:hover{
+  background-color: #1c3745;
+}
+.card-actions .btn{
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s ease, filter .2s ease, transform .06s ease;
+}
+.card-actions .btn:hover{ background: var(--accent-2); }
+.card-actions .btn:active{ transform: translateY(0.5px); }
+
+/* Modal (reusable base used by #modal in HTML) */
+.modal{
+  position: fixed; inset: 0; z-index: 50;
+  display: none; /* toggle to flex via JS */
+  align-items: center; justify-content: center;
+  background: rgba(0,0,0,.35);
+}
+.modal-content{
+  position: relative;
+  width: min(92vw, 560px);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+.close{
+  position: absolute; top: 10px; right: 12px;
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  background: #f3f4f6; color: #374151;
+  border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; font-size: 20px;
+}
+.close:hover{ filter: brightness(.96); }
+
+/* Ripple overlay (visual feedback after booking) */
+.ripple-overlay{
+  position: fixed;
+  width: 20px; height: 20px;
+  background-color: #1c3745;
+  border-radius: 50%;
+  z-index: 9999;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 1s ease-out, opacity 1s ease;
+  opacity: 0;
+}
+.ripple-overlay.active{
+  transform: translate(-50%, -50%) scale(150);
+  opacity: 1;
+}
+
+/* Bottom pop-up modal for booking (slide-up sheet) */
+.modalApp{
+  position: fixed;
   bottom: -100%;
   left: 50%;
   transform: translateX(-50%);
@@ -37,44 +173,44 @@
   box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
   border-radius: 10px 10px 0 0;
   text-align: center;
-  }
-  
-  .modalApp.active {
-    bottom: 0;
-  }
-  
-  .modalApp h2 {
-    margin-top: 20px;
-  }
-  
-  .modalApp input {
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
-    width: 90%;
-    margin-bottom: 40px;
-  }
+}
+.modalApp.active{ bottom: 0; }
+.modalApp h2{ margin-top: 20px; }
+.modalApp input,
+.modalApp select{
+  display: block;
+  margin: 10px auto 40px;
+  padding: 10px;
+  width: 90%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+.modalApp input:focus,
+.modalApp select:focus{
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 3px rgba(1,92,93,0.12);
+}
 
-  .modalApp select {
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
-    width: 90%;
-    margin-bottom: 40px;
-  }
-  
-  .confirm-booking {
-    padding: 10px 20px;
-    background: #1c3745;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    
-  
-    
-  }
-  .confirm-booking:hover {
-    filter: brightness(1.2);
-    background-color: #1c3745;
-  }
-  
+/* Confirm booking button */
+.confirm-booking{
+  padding: 10px 20px;
+  background: #1c3745;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: filter .2s ease;
+}
+.confirm-booking:hover{
+  filter: brightness(1.2);
+  background-color: #1c3745; /* keep same hue, just brighter via filter */
+}
+
+/* Responsive tweaks for bottom sheet */
+@media (max-width: 900px){
+  .modalApp{ width: 70%; }
+}
+@media (max-width: 600px){
+  .modalApp{ width: 92%; }
+}

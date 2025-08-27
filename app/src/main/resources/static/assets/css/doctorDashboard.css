@@ -1,65 +1,147 @@
-/* This is the style sheet for the doctorDashboard.html */
-/* 
-**Table Header (`.table-header`)**
+/* Reset & base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: Arial, sans-serif; color: #1f2937; }
 
-* Set font size to `24px` for clear emphasis.
-* Use a dark teal color (`#015c5d`) for consistency with the theme.
-* Add `30px` bottom margin and remove right margin.
+/* Neutral tokens (aligned with admin styles) */
+:root{
+  --bg: #f7f7f8;
+  --panel: #ffffff;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #015c5d;     /* soft teal */
+  --accent-2: #014b4c;   /* darker on hover */
+  --shadow: 0 10px 30px rgba(0,0,0,.06);
+}
 
-**Table Styling (`table`)**
+/* Page shell */
+.wrapper { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
+.main-content {
+  flex: 1;
+  max-width: 1100px;
+  width: 100%;
+  margin: 24px auto 32px;
+  padding: 0 16px;
+  display: grid;
+  gap: 16px;
+}
 
-* Make the table full width (`100%`).
-* Collapse borders for clean lines.
-* Use a `sans-serif` font.
-* Add `20px` top margin for spacing.
+/* Toolbar */
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
 
-**Table Head (`thead`)**
+.filters { display: flex; gap: 10px; align-items: center; }
 
-* Set a very light dark background (`#33333310`) for header row.
-* Use white text color (`#fff`).
+/* Inputs & buttons */
+.input {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #111827;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.input:focus { border-color: #cbd5e1; box-shadow: 0 0 0 3px rgba(1,92,93,0.12); }
 
-**Table Cells (`td, th`)**
+.button {
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s ease, filter .2s ease, transform .06s ease;
+}
+.button:hover { background: var(--accent-2); }
+.button:active { transform: translateY(0.5px); }
 
-* Apply padding of `12px 16px` for spacing.
-* Center-align the text.
-* Add a subtle bottom border (`1px solid #ddd`).
+.today-btn { margin-right: 6px; }
+.date-picker { min-width: 200px; }
 
-**Table Row Styling**
+/* Table */
+.table-wrap {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
 
-* Alternate row colors for better readability:
+.table-header {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
 
-  * Even rows: semi-transparent light grey (`#f9f9f959`).
-  * Odd rows: soft white background (`#ffffffc0`).
-* On hover: highlight row with a light teal overlay (`#015c5d39`).
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  margin-top: 6px;
+}
 
-**Prescription Button (`.prescription-btn`)**
+thead tr {
+  background: rgba(51, 51, 51, 0.06);
+}
+thead th {
+  color: #111827;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
 
-* Set size to `30px x 30px`.
-* Make it interactive with a pointer cursor.
-* Add transition effects for scale and brightness on hover.
-* On hover:
+tbody td {
+  text-align: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #111827;
+}
 
-  * Slightly enlarge (`scale(1.1)`)
-  * Brighten appearance
-* On click: slightly shrink (`scale(0.95)`).
+tbody tr:nth-child(odd)  { background: rgba(255,255,255,0.88); }
+tbody tr:nth-child(even) { background: rgba(249,249,249,0.55); }
 
-**No Record Message (`.noPatientRecord`)**
+tbody tr:hover { background: rgba(1,92,93,0.10); }
 
-* Use a `16px` italic grey font to indicate no data gently.
+/* Prescription button/icon cell (optional class name used by your JS) */
+.prescription-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: transform .08s ease, filter .2s ease, background .2s ease;
+}
+.prescription-btn:hover { filter: brightness(1.05); background: #fff; }
+.prescription-btn:active { transform: scale(0.96); }
 
-**Today Button (`.today-btn`)**
+/* Empty state */
+.noPatientRecord td {
+  font-style: italic;
+  color: var(--muted);
+  padding: 18px 12px;
+}
 
-* Add right margin (`10px`).
-* Add padding (`10px`).
-* Set background color to teal green (`#015c5d`).
-
-**Date Picker (`.date-picker`)**
-
-* Add left margin (`10px`) and top margin (`13px`).
-* Round corners with `8px` radius.
-* Add padding (`10px`) and set fixed height (`30px`).
-
----
-
-Let me know if you'd like a consolidated style guide for the entire HospitalCRM frontend.
- */
+/* Responsive */
+@media (max-width: 980px) {
+  .toolbar { grid-template-columns: 1fr; }
+  .filters { justify-content: flex-start; }
+}
+@media (max-width: 640px) {
+  thead th, tbody td { padding: 10px 12px; font-size: 14px; }
+  .table-header { font-size: 20px; }
+}

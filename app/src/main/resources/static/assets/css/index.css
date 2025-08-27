@@ -1,53 +1,92 @@
-/* this is the style sheet file for index.htlm  */
+/* Global reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; }
 
-/* 
-**Global Reset (`*`)**
+/* Layout wrappers */
+.container { min-height: 100%; }
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  background: url("../images/defineRole/index.png") center / cover no-repeat fixed;
+}
 
-* Remove all default margin and padding.
-* Use `border-box` for sizing to include padding and border in element size.
+/* Section card */
+.role {
+  width: 100%;
+  max-width: 640px;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(3px);
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  padding: 28px;
+  text-align: center;
+}
 
-**Base (`html, body`)**
+/* Heading + buttons */
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #003e3e;
+  margin-bottom: 24px;
+}
+.btn-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 
-* Set height to 100% for full viewport layout.
-* Use the `'Roboto'` sans-serif font for modern, clean typography.
+/* Buttons (neutral, not “cartoony”) */
+.dashboard-btn {
+  appearance: none;
+  background: #015c5d;
+  color: #fff;
+  border: 1px solid #01494a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background .2s ease, transform .06s ease, filter .2s ease, border-color .2s ease;
+}
+.dashboard-btn:hover { background: #014e4f; border-color: #013e3f; }
+.dashboard-btn:active { transform: translateY(0.5px); }
 
-**Layout Wrapper (`.wrapper`)**
+/* Modal */
+.modal {
+  position: fixed; inset: 0;
+  display: none; /* toggled to flex by JS when opened */
+  align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.55);
+  z-index: 50;
+}
+.modal-content {
+  position: relative;
+  width: min(92vw, 520px);
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+}
+.close {
+  position: absolute; top: 10px; right: 12px;
+  width: 36px; height: 36px;
+  border: none; border-radius: 8px;
+  background: #f4f4f4; color: #333; cursor: pointer;
+  font-size: 22px; line-height: 1;
+  display: grid; place-items: center;
+}
+.close:hover { filter: brightness(0.96); }
 
-* Use a vertical flexbox layout.
-* Ensure the wrapper covers at least the full height of the screen (`min-height: 100vh`).
-
-**Heading (`h2`)**
-
-* Set a large font size (`48px`) for prominence.
-* Add a bottom margin of `50px` for spacing.
-* Use a dark teal color (`#003e3e`).
-* Make the font bold and use a blended font stack (`'Alegreya', 'Roboto', sans-serif`) for elegant styling.
-
-**Main Section (`.main-content`)**
-
-* Allow the section to grow to fill space with `flex-grow: 1`.
-* Add `40px` of internal padding.
-* Center content both horizontally and vertically using `justify-content` and `align-items`.
-* Display items in a column direction.
-* Center all text.
-* Apply a full-screen background image with:
-
-  * `cover` size
-  * `center` positioning
-  * no repeat
-  * `fixed` attachment to keep image still during scroll
-
-**Buttons (`button`)**
-
-* Style with a teal green background (`#015c5d`) and white text.
-* Remove borders and round the corners (`12px`).
-* Use `10px 20px` padding and set width to `200px`.
-* Add a top margin of `10px` for spacing.
-* Enable pointer cursor and readable font size (`16px`).
-* On hover, change background color to bold red (`#A62B1F`).
-
-**Dashboard Buttons (`.dashboard-btn`)**
-
-* Use the same base green background (`#015c5d`) as the default button.
-* On hover, darken the background to deep teal (`#003e3e`) for visual feedback.
- */
+/* Responsive */
+@media (max-width: 600px) {
+  .btn-group { grid-template-columns: 1fr; }
+  .title { font-size: 26px; }
+}
